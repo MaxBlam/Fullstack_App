@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
-const router = require('./routes/cars');
+const router = require('./routes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const cors = require('cors');
 require('colors');

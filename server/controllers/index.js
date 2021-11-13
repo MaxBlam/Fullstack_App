@@ -1,9 +1,14 @@
 const asyncHandler = require('express-async-handler');
 const {
-  dbGetCars,
-  dbChangeStatusCar,
-  dbDeleteCar,
-  dbAddCar,
+  dbGetRides,
+  dbChangeTrain,
+  dbChangeStation,
+  dbDeleteRide,
+  dbDeleteTrain,
+  dbDeleteStation,
+  dbAddRide,
+  dbAddStation,
+  dbAddTrain,
 } = require('../model');
 
 const getCars = asyncHandler(async (req, res) => {
@@ -30,8 +35,13 @@ const addCar = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getCars,
-  changeStatusCar,
-  deleteCar,
-  addCar,
+  getRides,
+  changeTrain,
+  changeStation,
+  deleteRide,
+  deleteTrain,
+  deleteStation,
+  addRide,
+  addStation,
+  addTrain,
 };
