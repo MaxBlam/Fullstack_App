@@ -1,0 +1,32 @@
+GET http://localhost:3000/cars
+###############################
+
+DELETE http://localhost:3000/carsssss/2
+################################
+DELETE http://localhost:3000/cars/2
+################################
+DELETE http://localhost:3000/cars/22
+################################
+POST http://localhost:3000/cars
+contentType:application/json
+
+{
+"title": "Rare Oldtimer",
+"status": "available",
+"price": "52300",
+"image": "http://localhost:3000/images/car10.png",
+"miles": 189921,
+"yearOfMake": 1978,
+"owner": {
+"firstName": "Max",
+"lastName": "Blam"
+},
+"description": "Excellent condition. A trip back in time!"
+}
+################################
+PATCH http://localhost:3000/cars/2
+Content-Type: application/json
+
+{
+    "status":"reserved"
+}
