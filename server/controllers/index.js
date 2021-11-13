@@ -11,12 +11,12 @@ const {
   dbAddTrain,
 } = require('../model');
 
-const getCars = asyncHandler(async (req, res) => {
-  const result = await dbGetCars();
+const getRides = asyncHandler(async (req, res) => {
+  const result = await dbGetRides();
   res.status(result.code).json(result);
 });
 
-const changeStatusCar = asyncHandler(async (req, res) => {
+/*const changeStatusCar = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   const result = await dbChangeStatusCar(id, status);
@@ -32,16 +32,16 @@ const deleteCar = asyncHandler(async (req, res) => {
 const addCar = asyncHandler(async (req, res) => {
   const result = await dbAddCar(req.body);
   res.status(result.code).json(result);
-});
+});*/
 
 module.exports = {
   getRides,
-  changeTrain,
+  /*changeTrain,
   changeStation,
   deleteRide,
   deleteTrain,
   deleteStation,
   addRide,
   addStation,
-  addTrain,
+  addTrain,*/
 };
