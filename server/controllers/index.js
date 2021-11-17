@@ -21,12 +21,14 @@ const getRides = asyncHandler(async (req, res) => {
 
 const changeTrain = asyncHandler(async (req, res) => {
   const { name } = req.params;
-  const { desc } = req.body;
-  if (!name || !desc) {
-    res.status(400).send('One or more properties missing: name, desc');
+  const { train } = req.body;
+  if (!name || !train) {
+    res
+      .status(400)
+      .send('One or more properties missing: name, accessibility, seats, desc');
     return;
   }
-  const { code, data } = await dbChangeTrain(name, desc);
+  const { code, data } = await dbChangeTrain(name, train);
   res.status(code).json(data);
 });
 const changeStation = asyncHandler(async (req, res) => {

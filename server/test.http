@@ -5,13 +5,30 @@ PATCH http://localhost:3000/train/S100
 Content-Type: application/json
 
 {
-    "accessible":true,
-    "seats":3000,
-    "desc":"test"
+    "train":{
+        "barrierefrei":true,
+        "plaetze":3000,
+        "beschreibung":"test1"
+    }
+}
+################################
+PATCH http://localhost:3000/station/AAAAA
+Content-Type: application/json
+
+{
+    "station":{
+        "kuerzel":"BBBBB",
+        "name":"Test1",
+        "standort":"loc1"
+    }
 }
 ################################
 
-DELETE http://localhost:3000/carsssss/2
+DELETE http://localhost:3000/ride/
+################################
+DELETE http://localhost:3000/train/S100
+################################
+DELETE http://localhost:3000/station/BBBBB
 ################################
 
 POST http://localhost:3000/train
@@ -24,3 +41,21 @@ Content-Type: application/json
     "desc":"aaaaaaaaaaa"
 }
 ################################
+POST http://localhost:3000/station
+Content-Type: application/json
+
+{
+    "abbr":"AAAAA",
+    "name":"Test",
+    "location":"loc"
+}
+################################
+POST http://localhost:3000/ride
+Content-Type: application/json
+
+{
+    "stationFrom":"BBBBB",
+    "stationTo":"JJDIJ",
+    "departTime":"00:00:00",
+    "arrivalTime":"00:15:00"
+}

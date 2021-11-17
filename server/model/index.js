@@ -33,11 +33,11 @@ async function dbGetStation(abbr) {
   };
 }
 
-async function dbChangeTrain(name, newDesc) {
-  await db.query('UPDATE zug SET beschreibung=$1 WHERE name=$2', [
-    newDesc,
-    name,
-  ]);
+async function dbChangeTrain(name, newObject) {
+  let upd = [];
+  for (key in newObject) upd.push(`${key} = '${newObject[key]}'`);
+  const cmd = 'UPDATE zug SET ' + upd.join(', ') + ' WHERE name = $1';
+  await db.query(cmd, [name]);
   return {
     code: 200,
     data: 'Train was updated',
