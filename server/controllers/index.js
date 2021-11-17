@@ -12,36 +12,60 @@ const {
 } = require('../model');
 
 const getRides = asyncHandler(async (req, res) => {
-  const result = await dbGetRides();
-  res.status(result.code).json(result);
+  const { code, result } = await dbGetRides();
+  res.status(code).json(result);
 });
 
-/*const changeStatusCar = asyncHandler(async (req, res) => {
+const changeTrain = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
-  const result = await dbChangeStatusCar(id, status);
-  res.status(result.code).json(result);
+  const { desc } = req.body;
+  const { code, result } = await dbChangeTrain(id, desc);
+  res.status(code).json(result);
 });
-
-const deleteCar = asyncHandler(async (req, res) => {
+const changeStation = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const result = await dbDeleteCar(id);
-  res.status(result.code).json(result);
+  const { station } = req.body;
+  const { code, result } = await dbChangeStation(id, station);
+  res.status(code).json(result);
 });
 
-const addCar = asyncHandler(async (req, res) => {
-  const result = await dbAddCar(req.body);
-  res.status(result.code).json(result);
-});*/
+const deleteRide = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { code, result } = await dbDeleteRide(id);
+  res.status(code).json(result);
+});
+const deleteTrain = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { code, result } = await dbDeleteTrain(id);
+  res.status(code).json(result);
+});
+const deleteStation = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { code, result } = await dbDeleteStation(id);
+  res.status(code).json(result);
+});
+
+const addRide = asyncHandler(async (req, res) => {
+  const { code, result } = await dbAddRide(req.body);
+  res.status(code).json(result);
+});
+const addStation = asyncHandler(async (req, res) => {
+  const { code, result } = await dbAddStation(req.body);
+  res.status(code).json(result);
+});
+const addTrain = asyncHandler(async (req, res) => {
+  const { code, result } = await dbAddTrain(req.body);
+  res.status(code).json(result);
+});
 
 module.exports = {
   getRides,
-  /*changeTrain,
+  changeTrain,
   changeStation,
   deleteRide,
   deleteTrain,
   deleteStation,
   addRide,
   addStation,
-  addTrain,*/
+  addTrain,
 };
