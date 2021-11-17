@@ -15,19 +15,19 @@ const {
 } = require('../model');
 
 const getRides = asyncHandler(async (req, res) => {
-  const { code, result } = await dbGetRides();
-  res.status(code).json(result);
+  const { code, data } = await dbGetRides();
+  res.status(code).json(data);
 });
 
 const changeTrain = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { name } = req.params;
   const { desc } = req.body;
-  if (!id || !desc) {
-    res.status(400).send('One or more properties missing: id, desc');
+  if (!name || !desc) {
+    res.status(400).send('One or more properties missing: name, desc');
     return;
   }
-  const { code, result } = await dbChangeTrain(id, desc);
-  res.status(code).json(result);
+  const { code, data } = await dbChangeTrain(name, desc);
+  res.status(code).json(data);
 });
 const changeStation = asyncHandler(async (req, res) => {
   const { abbr } = req.params;
@@ -36,8 +36,8 @@ const changeStation = asyncHandler(async (req, res) => {
     res.status(400).send('One or more properties missing: abbr, station');
     return;
   }
-  const { code, result } = await dbChangeStation(abbr, station);
-  res.status(code).json(result);
+  const { code, data } = await dbChangeStation(abbr, station);
+  res.status(code).json(data);
 });
 
 const deleteRide = asyncHandler(async (req, res) => {
@@ -75,16 +75,16 @@ const deleteStation = asyncHandler(async (req, res) => {
 });
 
 const addRide = asyncHandler(async (req, res) => {
-  const { code, result } = await dbAddRide(req.body);
-  res.status(code).json(result);
+  const { code, data } = await dbAddRide(req.body);
+  res.status(code).json(data);
 });
 const addStation = asyncHandler(async (req, res) => {
-  const { code, result } = await dbAddStation(req.body);
-  res.status(code).json(result);
+  const { code, data } = await dbAddStation(req.body);
+  res.status(code).json(data);
 });
 const addTrain = asyncHandler(async (req, res) => {
-  const { code, result } = await dbAddTrain(req.body);
-  res.status(code).json(result);
+  const { code, data } = await dbAddTrain(req.body);
+  res.status(code).json(data);
 });
 
 module.exports = {

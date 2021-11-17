@@ -24,7 +24,9 @@ async function dbGetTrain(name) {
   };
 }
 async function dbGetStation(abbr) {
-  const { rows } = await db.query('SELECT * FROM bahnhof WHERE kuerzel=', [abbr]);
+  const { rows } = await db.query('SELECT * FROM bahnhof WHERE kuerzel=', [
+    abbr,
+  ]);
   return {
     code: 200,
     data: rows,
@@ -38,7 +40,7 @@ async function dbChangeTrain(name, newDesc) {
   ]);
   return {
     code: 200,
-    data: 'Status was updated',
+    data: 'Train was updated',
   };
 }
 async function dbChangeStation(abbr, newObject) {
@@ -48,7 +50,7 @@ async function dbChangeStation(abbr, newObject) {
   await db.query(cmd, [abbr]);
   return {
     code: 200,
-    data: 'Status was updated',
+    data: 'Station was updated',
   };
 }
 

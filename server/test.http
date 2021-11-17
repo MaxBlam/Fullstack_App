@@ -1,32 +1,26 @@
 GET http://localhost:3000/rides
 ###############################
 
-DELETE http://localhost:3000/carsssss/2
-################################
-DELETE http://localhost:3000/cars/2
-################################
-DELETE http://localhost:3000/cars/22
-################################
-POST http://localhost:3000/cars
-contentType:application/json
-
-{
-"title": "Rare Oldtimer",
-"status": "available",
-"price": "52300",
-"image": "http://localhost:3000/images/car10.png",
-"miles": 189921,
-"yearOfMake": 1978,
-"owner": {
-"firstName": "Max",
-"lastName": "Blam"
-},
-"description": "Excellent condition. A trip back in time!"
-}
-################################
-PATCH http://localhost:3000/cars/2
+PATCH http://localhost:3000/train/S100
 Content-Type: application/json
 
 {
-    "status":"reserved"
+    "accessible":true,
+    "seats":3000,
+    "desc":"test"
 }
+################################
+
+DELETE http://localhost:3000/carsssss/2
+################################
+
+POST http://localhost:3000/train
+Content-Type: application/json
+
+{
+    "name":"S100",
+    "accessible":false,
+    "seats":0,
+    "desc":"aaaaaaaaaaa"
+}
+################################
