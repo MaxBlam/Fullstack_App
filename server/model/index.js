@@ -30,18 +30,18 @@ async function dbGetStation(abbr) {
 }
 
 async function dbChangeTrain(name, newObject) {
-  let upd = [];
+  const upd = [];
   for (key in newObject) upd.push(`${key} = '${newObject[key]}'`);
-  const cmd = 'UPDATE zug SET ' + upd.join(', ') + ' WHERE name = $1';
+  const cmd = `UPDATE zug SET ${upd.join(', ')} WHERE name = $1`;
   await db.query(cmd, [name]);
   return {
     data: 'Train was updated',
   };
 }
 async function dbChangeStation(abbr, newObject) {
-  let upd = [];
+  const upd = [];
   for (key in newObject) upd.push(`${key} = '${newObject[key]}'`);
-  const cmd = 'UPDATE bahnhof SET ' + upd.join(', ') + ' WHERE kuerzel = $1';
+  const cmd = `UPDATE bahnhof SET ${upd.join(', ')} WHERE kuerzel = $1`;
   await db.query(cmd, [abbr]);
   return {
     data: 'Station was updated',
@@ -68,7 +68,9 @@ async function dbDeleteStation(abbr) {
 }
 
 async function dbAddRide(body) {
-  const { stationFrom, stationTo, departTime, arrivalTime } = body;
+  const {
+    stationFrom, stationTo, departTime, arrivalTime,
+  } = body;
   await db.query(
     'INSERT INTO fahrt (id,fk_bahnhofab,fk_bahnhofzu,abfahrt_zeit,ankunft_zeit) VALUES (DEFAULT, $1, $2, $3, $4)',
     [stationFrom, stationTo, departTime, arrivalTime],
@@ -88,7 +90,9 @@ async function dbAddStation(body) {
   };
 }
 async function dbAddTrain(body) {
-  const { name, accessible, seats, desc } = body;
+  const {
+    name, accessible, seats, desc,
+  } = body;
   await db.query(
     'INSERT INTO zug (name,barrierefrei,plaetze,beschreibung) VALUES ($1, $2, $3,$4)',
     [name, accessible, seats, desc],
