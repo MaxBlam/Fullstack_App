@@ -2,7 +2,7 @@ const db = require('../db');
 
 async function dbGetRides() {
   const { rows } = await db.query(
-    'SELECT id,abfahrt_zeit,b.name,b.standort,ankunft_zeit,b2.name,b2.standort FROM fahrt JOIN bahnhof b on b.kuerzel = fahrt.fk_bahnhofab JOIN bahnhof b2 on b2.kuerzel = fahrt.fk_bahnhofzu ORDER BY abfahrt_zeit',
+    'SELECT id,abfahrt_zeit, von.name as von, zu.name as zu, ankunft_zeit FROM fahrt JOIN bahnhof von on fahrt.fk_bahnhofab = von.kuerzel join bahnhof zu on zu.kuerzel = fahrt.fk_bahnhofzu ORDER BY abfahrt_zeit',
   );
   return {
     data: rows,

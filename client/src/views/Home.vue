@@ -4,7 +4,7 @@
       <v-toolbar color="pink" dark>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Departures</v-toolbar-title>
+        <v-toolbar-title>Upcoming</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -26,20 +26,31 @@
           active-class="pink--text"
           multiple
         >
-          <div v-for="(item,index) in filtered" :key="item.id">
+          <v-list-item>
+            <v-list-item-content>
+              <v-row no-gutters>
+                <v-col>
+                  <v-list-item-title v-text="'To'"></v-list-item-title>
+                </v-col>
+                <v-col>
+                  <v-list-item-title v-text="'Depart /'"></v-list-item-title>
+                  <v-list-item-title v-text="'Arrival'"></v-list-item-title>
+                </v-col>
+                <v-col>
+                  <v-list-item-title v-text="'From'"></v-list-item-title>
+                </v-col>
+              </v-row>
+            </v-list-item-content>
+          </v-list-item>
+          <div v-for="(item, index) in filtered" :key="item.id">
             <v-list-item :key="item.id">
               <template v-slot:default="{ active }">
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.name"></v-list-item-title>
-
-                  <v-list-item-subtitle
-                    class="text--primary"
-                    v-text="item.headline"
-                  ></v-list-item-subtitle>
-
-                  <v-list-item-subtitle
-                    v-text="item.subtitle"
-                  ></v-list-item-subtitle>
+                  <v-row no-gutters>
+                    <v-col v-for="key in item" :key="key" cols="12" sm="4">
+                      <v-list-item-title v-text="key"></v-list-item-title>
+                    </v-col>
+                  </v-row>
                 </v-list-item-content>
 
                 <v-list-item-action>
@@ -94,8 +105,8 @@ export default {
     filtered() {
       return this.items.filter(
         el =>
-          el.name.toLowerCase().includes(this.filter) ||
-          el.standort.toLowerCase().includes(this.filter),
+          el.zu.toLowerCase().includes(this.filter) ||
+          el.von.toLowerCase().includes(this.filter),
       );
     },
     filter() {
