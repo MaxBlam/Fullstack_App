@@ -7,10 +7,10 @@
       elevate-on-scroll
       scroll-target="#scrolling-techniques-7"
     >
-      <v-btn icon class="mx-1">
+      <v-btn icon class="mx-1" to="/">
         <v-img src="@/assets/logo.svg"></v-img>
       </v-btn>
-      <v-toolbar-title>Departures</v-toolbar-title>
+      <v-toolbar-title>Train Schedule</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -26,15 +26,18 @@
             <v-icon class="ms-auto">mdi-window-close</v-icon>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item to="/">
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/add">
             <v-list-item-title>Add</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Change</v-list-item-title>
+          <v-list-item to="/update">
+            <v-list-item-title>Update</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item to="/remove">
             <v-list-item-title>Remove</v-list-item-title>
           </v-list-item>
         </v-list-item-group>

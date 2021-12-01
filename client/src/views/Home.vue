@@ -4,7 +4,7 @@
       <v-toolbar color="pink" dark>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Upcoming</v-toolbar-title>
+        <v-toolbar-title>Upcoming Departures</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -29,42 +29,35 @@
           <v-list-item>
             <v-list-item-content>
               <v-row no-gutters>
-                <v-col>
+                <v-col cols="12" sm="4">
                   <v-list-item-title v-text="'To'"></v-list-item-title>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="4">
                   <v-list-item-title v-text="'Depart /'"></v-list-item-title>
                   <v-list-item-title v-text="'Arrival'"></v-list-item-title>
                 </v-col>
-                <v-col>
+                <v-col cols="12" sm="4">
                   <v-list-item-title v-text="'From'"></v-list-item-title>
                 </v-col>
               </v-row>
             </v-list-item-content>
+            <v-list-item-action> </v-list-item-action>
           </v-list-item>
           <div v-for="(item, index) in filtered" :key="item.id">
             <v-list-item :key="item.id">
-              <template v-slot:default="{ active }">
-                <v-list-item-content>
-                  <v-row no-gutters>
-                    <v-col v-for="key in item" :key="key" cols="12" sm="4">
-                      <v-list-item-title v-text="key"></v-list-item-title>
-                    </v-col>
-                  </v-row>
-                </v-list-item-content>
+              <v-list-item-content>
+                <v-row no-gutters>
+                  <v-col v-for="key in item" :key="key" cols="12" sm="4">
+                    <v-list-item-title v-text="key"></v-list-item-title>
+                  </v-col>
+                </v-row>
+              </v-list-item-content>
 
-                <v-list-item-action>
-                  <v-list-item-action-text
-                    v-text="item.action"
-                  ></v-list-item-action-text>
-
-                  <v-icon v-if="!active" color="grey lighten-1">
-                    mdi-star-outline
-                  </v-icon>
-
-                  <v-icon v-else color="yellow darken-3"> mdi-star </v-icon>
-                </v-list-item-action>
-              </template>
+              <v-list-item-action>
+                <v-btn color="error" depressed @click="deleteEvent(item.id)"
+                  >Delete event</v-btn
+                >
+              </v-list-item-action>
             </v-list-item>
 
             <v-divider v-if="index < items.length - 1" :key="index"></v-divider>
@@ -99,6 +92,17 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    async deleteEvent(id) {
+      try {
+        await axios({
+          url: 'http://localhost:3000/ride/' + id,
+          method: 'DELETE',
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      this.getDepatures();
     },
   },
   computed: {

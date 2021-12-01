@@ -44,7 +44,7 @@ const changeStation = asyncHandler(async (req, res) => {
 
 const deleteRide = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { data } = dbGetRide(id);
+  const { data } = await dbGetRide(id);
   if (data.length === 0) {
     res.status(404).send(`Ride ${id} does not exist`);
   } else {
@@ -54,7 +54,7 @@ const deleteRide = asyncHandler(async (req, res) => {
 });
 const deleteTrain = asyncHandler(async (req, res) => {
   const { name } = req.params;
-  const { data } = dbGetTrain(name);
+  const { data } = await dbGetTrain(name);
   if (data.length === 0) {
     res.status(404).send(`Train ${name} does not exist`);
   } else {
@@ -64,7 +64,7 @@ const deleteTrain = asyncHandler(async (req, res) => {
 });
 const deleteStation = asyncHandler(async (req, res) => {
   const { abbr } = req.params;
-  const { data } = dbGetStation(abbr);
+  const { data } = await dbGetStation(abbr);
   if (data.length === 0) {
     res.status(404).send(`Station ${abbr} does not exist`);
   } else {
