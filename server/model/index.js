@@ -74,10 +74,10 @@ async function dbDeleteStation(abbr) {
 }
 
 async function dbAddRide(body) {
-  const { stationFrom, stationTo, departTime, arrivalTime } = body;
+  const { id, stationFrom, stationTo, departTime, arrivalTime } = body;
   await db.query(
-    'INSERT INTO fahrt (id,fk_bahnhofab,fk_bahnhofzu,abfahrt_zeit,ankunft_zeit) VALUES (DEFAULT, $1, $2, $3, $4)',
-    [stationFrom, stationTo, departTime, arrivalTime]
+    'INSERT INTO fahrt (id,fk_bahnhofab,fk_bahnhofzu,abfahrt_zeit,ankunft_zeit) VALUES ( $1, $2, $3, $4,$5)',
+    [id, stationFrom, stationTo, departTime, arrivalTime]
   );
   return {
     data: 'Inserted',

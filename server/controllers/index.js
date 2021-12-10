@@ -79,6 +79,9 @@ const deleteStation = asyncHandler(async (req, res) => {
 });
 
 const addRide = asyncHandler(async (req, res) => {
+  let rides = await dbGetRides();
+  rides = rides.data.map((el) => el.id);
+  req.body.id = Math.max(...rides) + 1;
   const { data } = await dbAddRide(req.body);
   res.status(200).json(data);
 });
