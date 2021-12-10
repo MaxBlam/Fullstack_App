@@ -9,9 +9,7 @@ async function dbGetRides() {
   };
 }
 async function dbGetStations() {
-  const { rows } = await db.query(
-    'SELECT kuerzel FROM bahnhof'
-  );
+  const { rows } = await db.query('SELECT kuerzel FROM bahnhof');
   return {
     data: rows,
   };

@@ -115,17 +115,17 @@ export default {
         console.log(err);
       }
     },
-    async postEvent(fk_bahnhofab, fk_bahnhofzu, abfahrt_zeit, ankunft_zeit) {
-      console.log(fk_bahnhofab,fk_bahnhofzu,abfahrt_zeit,ankunft_zeit)
+    async postEvent(stationFrom, stationTo, departTime, arrivalTime) {
+      console.log(stationFrom, stationTo, departTime, arrivalTime);
       try {
         await axios({
-          url: 'http://localhost:3000/station',
+          url: 'http://localhost:3000/ride',
           method: 'POST',
           data: {
-            fk_bahnhofab,
-            fk_bahnhofzu,
-            abfahrt_zeit,
-            ankunft_zeit,
+            stationFrom,
+            stationTo,
+            departTime,
+            arrivalTime,
           },
         });
       } catch (error) {
@@ -138,14 +138,15 @@ export default {
       //Get Available Stations
       const available = await this.getStations();
       //Create Random Event
-      const fk_bahnhofzu =
+      const stationTo =
         available[Math.floor(Math.random() * (available.length - 1))].kuerzel;
-      const fk_bahnhofab =
+      const stationFrom =
         available[Math.floor(Math.random() * (available.length - 1))].kuerzel;
-      const abfahrt_zeit = this.randomTime();
-      const ankunft_zeit = this.randomTime();
+      const departTime = this.randomTime();
+      const arrivalTime = this.randomTime();
       //Post Event
-      await this.postEvent(fk_bahnhofab, fk_bahnhofzu, abfahrt_zeit, ankunft_zeit);
+      await this.postEvent(stationFrom, stationTo, departTime, arrivalTime);
+      await this.deleteEvent(this.items[0].id);
       //Wait until new Post
       setTimeout(() => {
         this.swapEvents();
