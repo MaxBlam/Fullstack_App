@@ -2,7 +2,15 @@ const db = require('../db');
 
 async function dbGetRides() {
   const { rows } = await db.query(
-    'SELECT id,abfahrt_zeit, von.name as von, zu.name as zu, ankunft_zeit FROM fahrt JOIN bahnhof von on fahrt.fk_bahnhofab = von.kuerzel join bahnhof zu on zu.kuerzel = fahrt.fk_bahnhofzu ORDER BY abfahrt_zeit',
+    'SELECT id,abfahrt_zeit, von.name as von, zu.name as zu, ankunft_zeit FROM fahrt JOIN bahnhof von on fahrt.fk_bahnhofab = von.kuerzel join bahnhof zu on zu.kuerzel = fahrt.fk_bahnhofzu ORDER BY abfahrt_zeit'
+  );
+  return {
+    data: rows,
+  };
+}
+async function dbGetStations() {
+  const { rows } = await db.query(
+    'SELECT kuerzel FROM bahnhof'
   );
   return {
     data: rows,
@@ -71,7 +79,7 @@ async function dbAddRide(body) {
   const { stationFrom, stationTo, departTime, arrivalTime } = body;
   await db.query(
     'INSERT INTO fahrt (id,fk_bahnhofab,fk_bahnhofzu,abfahrt_zeit,ankunft_zeit) VALUES (DEFAULT, $1, $2, $3, $4)',
-    [stationFrom, stationTo, departTime, arrivalTime],
+    [stationFrom, stationTo, departTime, arrivalTime]
   );
   return {
     data: 'Inserted',
@@ -81,7 +89,7 @@ async function dbAddStation(body) {
   const { abbr, name, location } = body;
   await db.query(
     'INSERT INTO bahnhof (kuerzel,name,standort) VALUES ($1, $2, $3)',
-    [abbr, name, location],
+    [abbr, name, location]
   );
   return {
     data: 'Inserted',
@@ -91,7 +99,7 @@ async function dbAddTrain(body) {
   const { name, accessible, seats, desc } = body;
   await db.query(
     'INSERT INTO zug (name,barrierefrei,plaetze,beschreibung) VALUES ($1, $2, $3,$4)',
-    [name, accessible, seats, desc],
+    [name, accessible, seats, desc]
   );
   return {
     data: 'Inserted',
@@ -100,6 +108,7 @@ async function dbAddTrain(body) {
 
 module.exports = {
   dbGetRides,
+  dbGetStations,
   dbGetRide,
   dbGetTrain,
   dbGetStation,

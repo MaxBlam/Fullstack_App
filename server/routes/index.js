@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   getRides,
+  getStations,
   changeTrain,
   changeStation,
   deleteRide,
@@ -14,6 +15,7 @@ const {
 const router = express.Router();
 
 router.get('/rides', getRides);
+router.get('/stations', getStations);
 router.patch('/train/:name', changeTrain);
 router.patch('/station/:abbr', changeStation);
 router.delete('/ride/:id', deleteRide);

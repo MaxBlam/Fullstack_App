@@ -81,6 +81,7 @@ export default {
   },
   created() {
     this.getDepatures();
+    this.swapEvents();
   },
   methods: {
     async getDepatures() {
@@ -104,13 +105,68 @@ export default {
       }
       this.getDepatures();
     },
+    async getStations() {
+      try {
+        const { data } = await axios({
+          url: 'http://localhost:3000/stations',
+        });
+        return data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async postEvent(fk_bahnhofab, fk_bahnhofzu, abfahrt_zeit, ankunft_zeit) {
+      console.log(fk_bahnhofab,fk_bahnhofzu,abfahrt_zeit,ankunft_zeit)
+      try {
+        await axios({
+          url: 'http://localhost:3000/station',
+          method: 'POST',
+          data: {
+            fk_bahnhofab,
+            fk_bahnhofzu,
+            abfahrt_zeit,
+            ankunft_zeit,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async swapEvents() {
+      //Refresh View
+      this.getDepatures();
+      //Get Available Stations
+      const available = await this.getStations();
+      //Create Random Event
+      const fk_bahnhofzu =
+        available[Math.floor(Math.random() * (available.length - 1))].kuerzel;
+      const fk_bahnhofab =
+        available[Math.floor(Math.random() * (available.length - 1))].kuerzel;
+      const abfahrt_zeit = this.randomTime();
+      const ankunft_zeit = this.randomTime();
+      //Post Event
+      await this.postEvent(fk_bahnhofab, fk_bahnhofzu, abfahrt_zeit, ankunft_zeit);
+      //Wait until new Post
+      setTimeout(() => {
+        this.swapEvents();
+      }, /*Math.floor(Math.random() * 60000 + 5000)*/ 10000);
+    },
+    randomTime() {
+      let start = new Date(2012, 0, 1);
+      let end = new Date();
+      return new Date(
+        start.getTime() + Math.random() * (end.getTime() - start.getTime())
+      )
+        .toTimeString()
+        .slice(0, 8);
+    },
   },
   computed: {
     filtered() {
       return this.items.filter(
-        el =>
+        (el) =>
           el.zu.toLowerCase().includes(this.filter) ||
-          el.von.toLowerCase().includes(this.filter),
+          el.von.toLowerCase().includes(this.filter)
       );
     },
     filter() {
