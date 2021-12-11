@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const {
   dbGetRides,
   dbGetStations,
+  dbGetTrains,
   dbGetRide,
   dbGetTrain,
   dbGetStation,
@@ -21,6 +22,10 @@ const getRides = asyncHandler(async (req, res) => {
 });
 const getStations = asyncHandler(async (req, res) => {
   const { data } = await dbGetStations();
+  res.status(200).json(data);
+});
+const getTrains = asyncHandler(async (req, res) => {
+  const { data } = await dbGetTrains();
   res.status(200).json(data);
 });
 
@@ -97,6 +102,7 @@ const addTrain = asyncHandler(async (req, res) => {
 module.exports = {
   getRides,
   getStations,
+  getTrains,
   changeTrain,
   changeStation,
   deleteRide,

@@ -130,15 +130,16 @@ export default {
       departures: [],
       selected: null,
       text: '',
-      stations: [],
       rules: {
         counter: (value) => value.length <= 20 || 'Max 20 characters',
       },
     };
   },
+  props: {
+    stations: Array,
+  },
   created() {
     this.getDepatures();
-    this.getStations();
     this.swapEvents();
   },
   methods: {
@@ -162,16 +163,6 @@ export default {
         console.log(error);
       }
       this.getDepatures();
-    },
-    async getStations() {
-      try {
-        const { data } = await axios({
-          url: 'http://localhost:3000/stations',
-        });
-        this.stations = data.map((el) => el['kuerzel']);
-      } catch (err) {
-        console.log(err);
-      }
     },
     async postEvent(stationFrom, stationTo, departTime, arrivalTime) {
       try {

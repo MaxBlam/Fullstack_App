@@ -41,16 +41,33 @@
       </v-list>
     </v-navigation-drawer>
     <v-main app>
-      <router-view />
+      <router-view :stations="stations" />
     </v-main>
   </v-app>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'App',
   data: () => ({
     drawer: false,
+    stations: [],
   }),
+  created() {
+    this.getStations();
+  },
+  methods: {
+    async getStations() {
+      try {
+        const { data } = await axios({
+          url: 'http://localhost:3000/stations',
+        });
+        this.stations = data.map((el) => el['kuerzel']);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
 };
 </script>

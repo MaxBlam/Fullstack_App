@@ -14,6 +14,13 @@ async function dbGetStations() {
     data: rows,
   };
 }
+async function dbGetTrains() {
+  const { rows } = await db.query('SELECT name FROM zug');
+  return {
+    data: rows,
+  };
+}
+
 async function dbGetRide(id) {
   const { rows } = await db.query('SELECT * FROM fahrt WHERE id=$1', [id]);
   return {
@@ -107,6 +114,7 @@ async function dbAddTrain(body) {
 module.exports = {
   dbGetRides,
   dbGetStations,
+  dbGetTrains,
   dbGetRide,
   dbGetTrain,
   dbGetStation,
