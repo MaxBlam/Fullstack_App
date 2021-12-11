@@ -29,9 +29,6 @@
           <v-list-item to="/">
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/add">
-            <v-list-item-title>Add</v-list-item-title>
-          </v-list-item>
 
           <v-list-item to="/update">
             <v-list-item-title>Update</v-list-item-title>

@@ -47,7 +47,12 @@
             <v-list-item :key="item.id">
               <v-list-item-content>
                 <v-row no-gutters>
-                  <v-col v-for="key in item" :key="key" cols="12" sm="4">
+                  <v-col
+                    v-for="(key, index) in item"
+                    :key="index"
+                    cols="12"
+                    sm="4"
+                  >
                     <v-list-item-title v-text="key"></v-list-item-title>
                   </v-col>
                 </v-row>
@@ -60,10 +65,58 @@
               </v-list-item-action>
             </v-list-item>
 
-            <v-divider v-if="index < items.length - 1" :key="index"></v-divider>
+            <v-divider
+              v-if="index < departures.length - 1"
+              :key="index"
+            ></v-divider>
           </div>
         </v-list-item-group>
       </v-list>
+    </v-card>
+    <v-card class="mx-auto my-5 col-md-5 col-sm-12">
+      <v-row
+        ><v-col md="6" sm="12" v-model="valid">
+          Add Train
+          <v-text-field
+            v-model="name"
+            :counter="20"
+            :rules="rules.counter"
+            label="Name"
+            required
+          ></v-text-field>
+
+          <v-select
+            v-model="select"
+            :items="stations"
+            label="Item"
+            required
+          ></v-select>
+
+          <v-text-field
+            v-model="name"
+            :rules="nameRules"
+            type="number"
+            label="Seats"
+            required
+          ></v-text-field>
+
+          <v-textarea
+            filled
+            name="input-7-4"
+            label="Description"
+            value=""
+          ></v-textarea>
+
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            @click="validate"
+          >
+            Add train
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card>
   </v-container>
 </template>
@@ -74,13 +127,18 @@ export default {
   name: 'Home',
   data() {
     return {
-      items: [],
+      departures: [],
       selected: null,
       text: '',
+      stations: [],
+      rules: {
+        counter: (value) => value.length <= 20 || 'Max 20 characters',
+      },
     };
   },
   created() {
     this.getDepatures();
+    this.getStations();
     this.swapEvents();
   },
   methods: {
@@ -89,7 +147,7 @@ export default {
         const { data } = await axios({
           url: 'http://localhost:3000/rides',
         });
-        this.items = data;
+        this.departures = data;
       } catch (err) {
         console.log(err);
       }
@@ -110,13 +168,12 @@ export default {
         const { data } = await axios({
           url: 'http://localhost:3000/stations',
         });
-        return data;
+        this.stations = data.map((el) => el['kuerzel']);
       } catch (err) {
         console.log(err);
       }
     },
     async postEvent(stationFrom, stationTo, departTime, arrivalTime) {
-      console.log(stationFrom, stationTo, departTime, arrivalTime);
       try {
         await axios({
           url: 'http://localhost:3000/ride',
@@ -133,24 +190,25 @@ export default {
       }
     },
     async swapEvents() {
-      //Refresh View
-      this.getDepatures();
-      //Get Available Stations
-      const available = await this.getStations();
+      await this.getStations();
       //Create Random Event
       const stationTo =
-        available[Math.floor(Math.random() * (available.length - 1))].kuerzel;
+        this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
       const stationFrom =
-        available[Math.floor(Math.random() * (available.length - 1))].kuerzel;
+        this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
       const departTime = this.randomTime();
       const arrivalTime = this.randomTime();
       //Post Event
       await this.postEvent(stationFrom, stationTo, departTime, arrivalTime);
-      await this.deleteEvent(this.items[0].id);
+      if (this.departures[0] != undefined) {
+        await this.deleteEvent(this.departures[0].id);
+      }
+      //Refresh View
+      this.getDepatures();
       //Wait until new Post
       setTimeout(() => {
         this.swapEvents();
-      }, /*Math.floor(Math.random() * 60000 + 5000)*/ 10000);
+      }, Math.floor(Math.random() * 60000 + 5000));
     },
     randomTime() {
       let start = new Date(2012, 0, 1);
@@ -164,7 +222,7 @@ export default {
   },
   computed: {
     filtered() {
-      return this.items.filter(
+      return this.departures.filter(
         (el) =>
           el.zu.toLowerCase().includes(this.filter) ||
           el.von.toLowerCase().includes(this.filter)
