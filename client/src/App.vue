@@ -41,7 +41,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-main app>
-      <router-view :stations="stations" />
+      <router-view
+        :stations="stations"
+        :trains="trains"
+        @getStations="getStations"
+      />
     </v-main>
   </v-app>
 </template>
@@ -53,9 +57,11 @@ export default {
   data: () => ({
     drawer: false,
     stations: [],
+    trains: [],
   }),
   created() {
     this.getStations();
+    this.getTrains();
   },
   methods: {
     async getStations() {
@@ -66,6 +72,17 @@ export default {
         this.stations = data.map((el) => el['kuerzel']);
       } catch (err) {
         console.log(err);
+      }
+    },
+    async getTrains() {
+      try {
+        let { data } = await axios({
+          url: 'http://localhost:3000/trains',
+          method: 'GET',
+        });
+        this.trains = data.map((el) => el['name']);
+      } catch (error) {
+        console.error(error);
       }
     },
   },

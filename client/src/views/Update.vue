@@ -93,16 +93,13 @@ export default {
     accessibility: false,
     abbr: '',
     stationName: '',
-    trains: [],
     train: '',
     desc: '',
     seats: '',
   }),
-  created() {
-    this.getTrains();
-  },
   props: {
     stations: Array,
+    trains: Array,
   },
   methods: {
     async postStation() {
@@ -134,17 +131,6 @@ export default {
             },
           },
         });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async getTrains() {
-      try {
-        let { data } = await axios({
-          url: 'http://localhost:3000/trains',
-          method: 'GET',
-        });
-        this.trains = data.map((el) => el['name']);
       } catch (error) {
         console.error(error);
       }

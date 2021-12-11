@@ -80,7 +80,6 @@
           <v-text-field
             v-model="name"
             :counter="20"
-            :rules="rules.counter"
             label="Name"
             required
           ></v-text-field>
@@ -130,9 +129,6 @@ export default {
       departures: [],
       selected: null,
       text: '',
-      rules: {
-        counter: (value) => value.length <= 20 || 'Max 20 characters',
-      },
     };
   },
   props: {
@@ -140,6 +136,8 @@ export default {
   },
   created() {
     this.getDepatures();
+  },
+  activated() {
     this.swapEvents();
   },
   methods: {
@@ -181,7 +179,7 @@ export default {
       }
     },
     async swapEvents() {
-      await this.getStations();
+      await this.$emit('getStations');
       //Create Random Event
       const stationTo =
         this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
@@ -199,7 +197,7 @@ export default {
       //Wait until new Post
       setTimeout(() => {
         this.swapEvents();
-      }, Math.floor(Math.random() * 60000 + 5000));
+      }, 10000);
     },
     randomTime() {
       let start = new Date(2012, 0, 1);
