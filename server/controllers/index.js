@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const {
   dbGetRides,
+  dbGetStations,
+  dbGetTrains,
   dbGetRide,
   dbGetTrain,
   dbGetStation,
@@ -16,6 +18,14 @@ const {
 
 const getRides = asyncHandler(async (req, res) => {
   const { data } = await dbGetRides();
+  res.status(200).json(data);
+});
+const getStations = asyncHandler(async (req, res) => {
+  const { data } = await dbGetStations();
+  res.status(200).json(data);
+});
+const getTrains = asyncHandler(async (req, res) => {
+  const { data } = await dbGetTrains();
   res.status(200).json(data);
 });
 
@@ -44,7 +54,7 @@ const changeStation = asyncHandler(async (req, res) => {
 
 const deleteRide = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { data } = dbGetRide(id);
+  const { data } = await dbGetRide(id);
   if (data.length === 0) {
     res.status(404).send(`Ride ${id} does not exist`);
   } else {
@@ -54,7 +64,7 @@ const deleteRide = asyncHandler(async (req, res) => {
 });
 const deleteTrain = asyncHandler(async (req, res) => {
   const { name } = req.params;
-  const { data } = dbGetTrain(name);
+  const { data } = await dbGetTrain(name);
   if (data.length === 0) {
     res.status(404).send(`Train ${name} does not exist`);
   } else {
@@ -64,7 +74,7 @@ const deleteTrain = asyncHandler(async (req, res) => {
 });
 const deleteStation = asyncHandler(async (req, res) => {
   const { abbr } = req.params;
-  const { data } = dbGetStation(abbr);
+  const { data } = await dbGetStation(abbr);
   if (data.length === 0) {
     res.status(404).send(`Station ${abbr} does not exist`);
   } else {
@@ -74,6 +84,9 @@ const deleteStation = asyncHandler(async (req, res) => {
 });
 
 const addRide = asyncHandler(async (req, res) => {
+  let rides = await dbGetRides();
+  rides = rides.data.map((el) => el.id);
+  req.body.id = Math.max(...rides) + 1;
   const { data } = await dbAddRide(req.body);
   res.status(200).json(data);
 });
@@ -88,6 +101,8 @@ const addTrain = asyncHandler(async (req, res) => {
 
 module.exports = {
   getRides,
+  getStations,
+  getTrains,
   changeTrain,
   changeStation,
   deleteRide,
