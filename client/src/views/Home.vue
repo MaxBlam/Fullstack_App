@@ -2,7 +2,6 @@
   <v-container>
     <v-card class="mx-auto">
       <v-toolbar color="pink" dark>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
         <v-toolbar-title>Upcoming Departures</v-toolbar-title>
 
@@ -75,31 +74,31 @@
     </v-card>
     <v-card class="mx-auto my-5 col-md-5 col-sm-12">
       <v-row
-        ><v-col md="6" sm="12" v-model="valid">
+        ><v-col md="6" sm="12">
           Add Train
           <v-text-field
-            v-model="name"
+            v-model="train.name"
             :counter="20"
             label="Name"
             required
           ></v-text-field>
 
           <v-select
-            v-model="select"
-            :items="stations"
-            label="Item"
+            v-model="train.accessible"
+            :items="['true', 'false']"
+            label="Accessible"
             required
           ></v-select>
 
           <v-text-field
-            v-model="name"
-            :rules="nameRules"
+            v-model="train.seats"
             type="number"
             label="Seats"
             required
           ></v-text-field>
 
           <v-textarea
+            v-model="train.desc"
             filled
             name="input-7-4"
             label="Description"
@@ -107,12 +106,56 @@
           ></v-textarea>
 
           <v-btn
-            :disabled="!valid"
+            :disabled="
+              !train.accessible ||
+              !train.seats ||
+              !train.name ||
+              train.name.length > 20
+            "
             color="success"
             class="mr-4"
-            @click="validate"
+            @click="postTrain()"
           >
             Add train
+          </v-btn>
+        </v-col>
+        <v-col md="6" sm="12">
+          Add Station
+          <v-text-field
+            v-model="station.abbr"
+            :counter="20"
+            label="Abbreviation"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="station.name"
+            :counter="100"
+            label="Name"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="station.location"
+            :counter="200"
+            label="Location"
+            required
+          ></v-text-field>
+
+          <v-btn
+            :disabled="
+              !station.name ||
+              !station.abbr ||
+              !station.location ||
+              station.abbr.length > 20 ||
+              station.name.length > 100 ||
+              station.location.length > 200
+            "
+            color="success"
+            class="mr-4"
+            @click="postStation()"
+          >
+            Add Station
           </v-btn>
         </v-col>
       </v-row>
@@ -129,6 +172,8 @@ export default {
       departures: [],
       selected: null,
       text: '',
+      train: {},
+      station: {},
     };
   },
   props: {
@@ -136,8 +181,6 @@ export default {
   },
   created() {
     this.getDepatures();
-  },
-  activated() {
     this.swapEvents();
   },
   methods: {
@@ -159,6 +202,7 @@ export default {
         });
       } catch (error) {
         console.log(error);
+        return error;
       }
       this.getDepatures();
     },
@@ -179,18 +223,24 @@ export default {
       }
     },
     async swapEvents() {
-      await this.$emit('getStations');
       //Create Random Event
-      const stationTo =
-        this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
-      const stationFrom =
-        this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
+      let stationTo;
+      let stationFrom;
+      while (stationTo == stationFrom) {
+        stationTo =
+          this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
+        stationFrom =
+          this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
+      }
       const departTime = this.randomTime();
       const arrivalTime = this.randomTime();
       //Post Event
-      await this.postEvent(stationFrom, stationTo, departTime, arrivalTime);
+      let answer;
       if (this.departures[0] != undefined) {
-        await this.deleteEvent(this.departures[0].id);
+        answer = await this.deleteEvent(this.departures[0].id);
+      }
+      if (answer == undefined) {
+        await this.postEvent(stationFrom, stationTo, departTime, arrivalTime);
       }
       //Refresh View
       this.getDepatures();
@@ -203,18 +253,40 @@ export default {
       let start = new Date(2012, 0, 1);
       let end = new Date();
       return new Date(
-        start.getTime() + Math.random() * (end.getTime() - start.getTime())
+        start.getTime() + Math.random() * (end.getTime() - start.getTime()),
       )
         .toTimeString()
         .slice(0, 8);
+    },
+    async postTrain() {
+      try {
+        await axios({
+          url: 'http://localhost:3000/train',
+          method: 'POST',
+          data: this.train,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async postStation() {
+      try {
+        await axios({
+          url: 'http://localhost:3000/train',
+          method: 'POST',
+          data: this.station,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   computed: {
     filtered() {
       return this.departures.filter(
-        (el) =>
+        el =>
           el.zu.toLowerCase().includes(this.filter) ||
-          el.von.toLowerCase().includes(this.filter)
+          el.von.toLowerCase().includes(this.filter),
       );
     },
     filter() {
