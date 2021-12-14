@@ -2,7 +2,6 @@
   <v-container>
     <v-card class="mx-auto">
       <v-toolbar color="pink" dark>
-
         <v-toolbar-title>Upcoming Departures</v-toolbar-title>
 
         <v-spacer></v-spacer>
@@ -181,6 +180,8 @@ export default {
   },
   created() {
     this.getDepatures();
+  },
+  mounted() {
     this.swapEvents();
   },
   methods: {
@@ -224,14 +225,10 @@ export default {
     },
     async swapEvents() {
       //Create Random Event
-      let stationTo;
-      let stationFrom;
-      while (stationTo == stationFrom) {
-        stationTo =
-          this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
-        stationFrom =
-          this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
-      }
+      const stationTo =
+        this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
+      const stationFrom =
+        this.stations[Math.floor(Math.random() * (this.stations.length - 1))];
       const departTime = this.randomTime();
       const arrivalTime = this.randomTime();
       //Post Event
